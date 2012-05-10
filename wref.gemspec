@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kasper Johansen"]
   s.date = %q{2012-05-10}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{Lightweight weak reference and weak hash that works in 1.9 and JRuby.}
   s.email = %q{k@spernj.org}
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -27,13 +27,14 @@ Gem::Specification.new do |s|
     "VERSION",
     "lib/wref.rb",
     "spec/spec_helper.rb",
-    "spec/wref_spec.rb"
+    "spec/wref_spec.rb",
+    "wref.gemspec"
   ]
   s.homepage = %q{http://github.com/kaspernj/wref}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.6.2}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{Weak references and weak hash for Ruby}
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
