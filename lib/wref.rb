@@ -21,18 +21,26 @@ class Wref
   
   #Initializes various variables.
   def initialize(obj)
-    @id = obj.__id__
-    
     if RUBY_ENGINE == "jruby"
       require "java"
       @weakref = java.lang.ref.WeakReference.new(obj)
     else
+      @id = obj.__id__
       @class_name = obj.class.name.to_sym
+      ObjectSpace.define_finalizer(obj, self.method(:destroy))
       
-      if obj.respond_to?("__object_unique_id__")
+      if obj.respond_to?(:__object_unique_id__)
         @unique_id = obj.__object_unique_id__
       end
     end
+  end
+  
+  #Destroyes most variables on the object, releasing memory and returning 'Wref::Recycled' all the time.
+  def destroy
+    @id = nil
+    @class_name = nil
+    @unique_id = nil
+    @weakref = nil
   end
   
   #Returns the object that this weak reference holds or raises Wref::Recycled.
@@ -44,9 +52,8 @@ class Wref
   # end
   def get
     begin
-      raise Wref::Recycled if !@class_name or !@id
-      
       if RUBY_ENGINE == "jruby"
+        raise Wref::Recycled if !@weakref
         obj = @weakref.get
         
         if obj == nil
@@ -55,23 +62,22 @@ class Wref
           return obj
         end
       else
+        raise Wref::Recycled if !@class_name or !@id
         obj = ObjectSpace._id2ref(@id)
-      end
-      
-      #Some times this class-name will be nil for some reason - knj
-      obj_class_name = obj.class.name
-      
-      if !obj_class_name or @class_name != obj_class_name.to_sym or @id != obj.__id__
-        raise Wref::Recycled
-      end
-      
-      if @unique_id
-        if !obj.respond_to?("__object_unique_id__") or obj.__object_unique_id__ != @unique_id
+        
+        #Some times this class-name will be nil for some reason - knj
+        obj_class_name = obj.class.name
+        
+        if !obj_class_name or @class_name != obj_class_name.to_sym or @id != obj.__id__
           raise Wref::Recycled
         end
+        
+        if @unique_id
+          raise Wref::Recycled if !obj.respond_to?(:__object_unique_id__) or obj.__object_unique_id__ != @unique_id
+        end
+        
+        return obj
       end
-      
-      return obj
     rescue RangeError, TypeError
       raise Wref::Recycled
     end
