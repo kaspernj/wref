@@ -36,8 +36,8 @@ class Wref
     end
   end
   
-  #Destroyes most variables on the object, releasing memory and returning 'Wref::Recycled' all the time.
-  def destroy
+  #Destroyes most variables on the object, releasing memory and returning 'Wref::Recycled' all the time. It takes arguments because it can be called from destructor of the original object. It doesnt use the arguments for anything.
+  def destroy(*args)
     @id = nil
     @class_name = nil
     @unique_id = nil
