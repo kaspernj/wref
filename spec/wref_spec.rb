@@ -28,11 +28,14 @@ describe "Wref" do
       #Test each-method.
       count = 0
       str_col = ""
+      key_col = ""
       map.each do |key, a_str|
         count += 1
         str_col << a_str
+        key_col << key.to_s
       end
       
+      raise "Expected key-collection to be '56' but it wasnt: #{key_col}" if key_col != "56"
       raise "Expected collection to be 'Testtrala' but it wasnt: #{str_col}" if str_col != "Testtrala"
       raise "Expected count 2 but it wasnt: #{count}" if count != 2
       
