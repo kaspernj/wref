@@ -28,7 +28,7 @@ describe "Wref" do
       #Test each-method.
       count = 0
       str_col = ""
-      map.each do |a_str|
+      map.each do |key, a_str|
         count += 1
         str_col << a_str
       end
@@ -50,7 +50,7 @@ describe "Wref" do
       
       #Test each-method.
       count = 0
-      map.each do |a_str|
+      map.each do |key, a_str|
         count += 1
       end
       

@@ -262,7 +262,7 @@ class Wref_map
       
       ids.each do |id|
         if obj = self.get!(id)
-          yielder << obj
+          yielder << [id, obj]
         end
       end
     end
