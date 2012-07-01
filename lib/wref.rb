@@ -248,6 +248,32 @@ class Wref_map
     end
   end
   
+  #Iterates over every valid object in the weak map.
+  #===Examples
+  # map.each do |obj|
+  #   puts "Object alive: #{obj}"
+  # end
+  def each(&block)
+    enum = Enumerator.new do |yielder|
+      ids = nil
+      @mutex.synchronize do
+        ids = @map.keys
+      end
+      
+      ids.each do |id|
+        if obj = self.get!(id)
+          yielder << obj
+        end
+      end
+    end
+    
+    if block
+      enum.each(&block)
+    else
+      return enum
+    end
+  end
+  
   #Make it hash-compatible.
   alias has_key? key?
   alias [] get
