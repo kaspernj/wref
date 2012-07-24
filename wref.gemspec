@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wref}
-  s.version = "0.0.4"
+  s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kasper Johansen"]
-  s.date = %q{2012-07-01}
+  s.date = %q{2012-07-24}
   s.description = %q{Lightweight weak reference and weak hash that works in 1.9 and JRuby.}
   s.email = %q{k@spernj.org}
   s.extra_rdoc_files = [
