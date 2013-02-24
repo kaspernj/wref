@@ -21,9 +21,15 @@ class Wref
   #Returns the object-ID which is used to look up the ObjectSpace (if not running JRuby).
   attr_reader :id
   
+  #This can be used to debug the behavior of the library.
+  USE_NATIVE_RUBY_IMPLEMENTATION = false
+  
   #Initializes various variables.
   def initialize(obj)
-    if RUBY_ENGINE == "jruby"
+    if USE_NATIVE_RUBY_IMPLEMENTATION
+      require "weakref"
+      @weakref = WeakRef.new(obj)
+    elsif RUBY_ENGINE == "jruby"
       @weakref = java.lang.ref.WeakReference.new(obj)
     else
       @id = obj.__id__
@@ -53,7 +59,14 @@ class Wref
   # end
   def get
     begin
-      if RUBY_ENGINE == "jruby"
+      if USE_NATIVE_RUBY_IMPLEMENTATION
+        begin
+          return @weakref.__getobj__
+        rescue => e
+          raise Wref::Recycled if e.class.name == "RefError"
+          raise e
+        end
+      elsif RUBY_ENGINE == "jruby"
         raise Wref::Recycled if !@weakref
         obj = @weakref.get
         
@@ -81,6 +94,15 @@ class Wref
       end
     rescue RangeError, TypeError
       raise Wref::Recycled
+    end
+  end
+  
+  #The same as the normal 'get' but returns nil instead of raising Wref::Cycled-error.
+  def get!
+    begin
+      return self.get
+    rescue Wref::Recycled
+      return nil
     end
   end
   
