@@ -1,3 +1,7 @@
+[![Build Status](https://api.shippable.com/projects/540e7b9f3479c5ea8f9ec25e/badge?branchName=master)](https://app.shippable.com/projects/540e7b9f3479c5ea8f9ec25e/builds/latest)
+[![Code Climate](https://codeclimate.com/github/kaspernj/wref/badges/gpa.svg)](https://codeclimate.com/github/kaspernj/wref)
+[![Test Coverage](https://codeclimate.com/github/kaspernj/wref/badges/coverage.svg)](https://codeclimate.com/github/kaspernj/wref)
+
 # Wref
 
 Weak references for Ruby
