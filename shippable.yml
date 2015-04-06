@@ -4,6 +4,6 @@ rvm:
   - ruby-head
   - jruby-head
 script:
-  - CODECLIMATE_REPO_TOKEN=32061319cc6d2e0bd0d0eb88afdc6d7b68829b357ca76efb99f86d7a1a89539e bundle exec rspec
+  - CODECLIMATE_REPO_TOKEN=23d002ad9b86687a067e6bbc81320cd979ffad756d1be69ca4e24c1038ee19a6 bundle exec rspec
 notifications:
   email: false
