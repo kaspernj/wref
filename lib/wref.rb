@@ -81,7 +81,7 @@ class Wref
           return obj
         end
       else
-        raise Wref::Recycled if !@class_name or !@id
+        raise Wref::Recycled if !@class_name || !@id
         obj = ObjectSpace._id2ref(@id)
 
         #Some times this class-name will be nil for some reason - knj
@@ -105,7 +105,7 @@ class Wref
   #The same as the normal 'get' but returns nil instead of raising Wref::Cycled-error.
   def get!
     begin
-      return self.get
+      return get
     rescue Wref::Recycled
       return nil
     end
@@ -115,7 +115,7 @@ class Wref
   # print "The object still exists in memory." if wref.alive?
   def alive?
     begin
-      self.get
+      get
       return true
     rescue Wref::Recycled
       return false

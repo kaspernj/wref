@@ -33,7 +33,7 @@ class Wref::Map
 
     #JRuby cant handle this atm... Dunno why...
     if RUBY_ENGINE != "jruby"
-      ObjectSpace.define_finalizer(obj, self.method(:delete_by_id))
+      ObjectSpace.define_finalizer(obj, method(:delete_by_id))
     end
 
     return nil
@@ -51,7 +51,7 @@ class Wref::Map
     begin
       wref = nil
       @mutex.synchronize do
-        raise Wref::Recycled if !@map.key?(id)
+        raise Wref::Recycled unless @map.key?(id)
         wref = @map[id]
       end
 
@@ -124,8 +124,8 @@ class Wref::Map
 
   #Cleans the hash and returns the length. This is slower but more accurate than the ordinary length that just returns the hash-length.
   def length_valid
-    self.clean
-    return self.length
+    clean
+    return length
   end
 
   #Deletes a key in the hash.
