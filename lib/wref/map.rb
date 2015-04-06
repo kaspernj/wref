@@ -13,7 +13,7 @@
 #   print "Object has been garbage-collected."
 # end
 #
-# obj = map.get!(1)
+# obj = map.get(1)
 # print "Object still exists in memory." if obj
 class Wref::Map
   def initialize(args = nil)
@@ -39,15 +39,15 @@ class Wref::Map
     return nil
   end
 
-  #Returns a object by ID or raises a RefError.
+  #Returns an object by ID or raises a RefError.
   #===Examples
   # begin
-  #   obj = map[1]
+  #   obj = map.get!(1)
   #   print "Object still exists in memory."
   # rescue Wref::Recycled
   #   print "Object has been garbage-collected."
   # end
-  def get(id)
+  def get!(id)
     begin
       wref = nil
       @mutex.synchronize do
@@ -57,18 +57,18 @@ class Wref::Map
 
       return wref.get
     rescue Wref::Recycled => e
-      self.delete(id)
+      delete(id)
       raise e
     end
   end
 
-  #The same as 'get' but returns nil instead of WeakRef-error. This can be used to avoid writing lots of code.
+  #The same as 'get!' but returns nil instead of WeakRef-error. This can be used to avoid writing lots of code.
   #===Examples
-  # obj = map.get!(1)
+  # obj = map.get(1)
   # print "Object still exists in memory." if obj
-  def get!(id)
+  def get(id)
     begin
-      return self.get(id)
+      return get!(id)
     rescue Wref::Recycled
       return nil
     end
@@ -83,7 +83,7 @@ class Wref::Map
 
     keys.each do |key|
       begin
-        self.get(key) #this will remove the key if the object no longer exists.
+        get(key) #this will remove the key if the object no longer exists.
       rescue Wref::Recycled
         #ignore.
       end
@@ -95,7 +95,7 @@ class Wref::Map
   #Returns true if a given key exists and the object it holds is alive.
   def valid?(key)
     @mutex.synchronize do
-      return false if !@map.key?(key)
+      return false unless @map.key?(key)
     end
 
     begin
@@ -133,7 +133,13 @@ class Wref::Map
     @mutex.synchronize do
       wref = @map[key]
       @ids.delete(wref.id) if wref
-      return @map.delete(key).get!
+      object = @map.delete(key)
+
+      if object
+        return object.get
+      else
+        return nil
+      end
     end
   end
 
@@ -142,7 +148,14 @@ class Wref::Map
     @mutex.synchronize do
       id = @ids[object_id]
       @ids.delete(object_id)
-      return @map.delete(id).get!
+
+      object = @map.delete(id)
+
+      if object
+        return object.get
+      else
+        return nil
+      end
     end
   end
 
@@ -159,7 +172,7 @@ class Wref::Map
       end
 
       ids.each do |id|
-        if obj = self.get!(id)
+        if obj = get(id)
           yielder << [id, obj]
         end
       end

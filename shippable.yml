@@ -1,8 +1,6 @@
 language: ruby
 rvm:
-  - ruby-1.9.3-head
-  - ruby-head
-  - jruby-head
+  - 2.1.2
 script:
   - CODECLIMATE_REPO_TOKEN=23d002ad9b86687a067e6bbc81320cd979ffad756d1be69ca4e24c1038ee19a6 bundle exec rspec
 notifications:

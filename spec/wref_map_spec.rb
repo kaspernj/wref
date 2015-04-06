@@ -6,7 +6,7 @@ describe Wref::Map do
     GC.enable
     GC.start
 
-    1000.times do
+    10000.times do
       some_str = "#{Digest::MD5.hexdigest(Time.now.to_f.to_s)}".clone
       some_str = nil
     end
@@ -91,5 +91,11 @@ describe Wref::Map do
     count.should eq 1
     map.valid?(5).should eq true
     map.valid?(6).should eq false
+
+    map.get(5).should eq "Test"
+    map.get(6).should eq nil
+
+    map.get!(5).should eq "Test"
+    expect { map.get!(6) }.to raise_error(Wref::Recycled)
   end
 end
