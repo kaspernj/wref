@@ -28,7 +28,7 @@ weak_ref.alive? #=> true | false
 ### Weak map
 
 ```ruby
-weak_map = Wref_map.new
+weak_map = Wref::Map.new
 map[1] = str
 ```
 
@@ -45,7 +45,7 @@ weak_map.get(1) #=> "Test" | Error - Wref::Recycled
 ```
 
 ## Contributing to wref
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
 * Fork the project.
