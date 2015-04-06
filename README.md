@@ -1,10 +1,10 @@
 # Wref
 
-Weak references for Ruby.
+Weak references for Ruby
 
 ## Install
 
-Add to your Gemfile and bundle.
+Add to your Gemfile and bundle
 
 ```ruby
 gem "wref"
@@ -12,7 +12,37 @@ gem "wref"
 
 ## Usage
 
-Stub
+### Make a new weak reference
+
+```ruby
+str = "Test"
+weak_ref = Wref.new(str)
+```
+
+### Check if reference is still alive
+
+```ruby
+weak_ref.alive? #=> true | false
+```
+
+### Weak map
+
+```ruby
+weak_map = Wref_map.new
+map[1] = str
+```
+
+### Check if key is valid in a weak map.
+
+```ruby
+weak_map.valid?(1) #=> true | false
+```
+
+### Get from a key
+
+```ruby
+weak_map.get(1) #=> "Test" | Error - Wref::Recycled
+```
 
 ## Contributing to wref
  
