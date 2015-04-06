@@ -1,5 +1,3 @@
-require "java" if RUBY_ENGINE == "jruby"
-
 #A simple weak-reference framework with mapping. Only handles the referencing of objects.
 #===Examples
 # user_obj = ob.get(:User, 1)
@@ -35,6 +33,7 @@ class Wref
       require "weakref"
       @weakref = WeakRef.new(obj)
     elsif RUBY_ENGINE == "jruby"
+      require "java"
       @weakref = java.lang.ref.WeakReference.new(obj)
     else
       @id = obj.__id__
