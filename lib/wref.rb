@@ -37,7 +37,7 @@ class Wref
     if args[:impl]
       @implementation = args[:impl]
     elsif RUBY_ENGINE == "jruby"
-      @implementation = :Weakling
+      @implementation = :JavaWeakReference
     else
       @implementation = :IdClassUnique
     end
