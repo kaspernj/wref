@@ -18,7 +18,7 @@ GEM
       nokogiri (~> 1.5.2)
       oauth2
     hashie (3.4.1)
-    highline (1.7.1)
+    highline (1.6.21)
     jeweler (1.8.8)
       builder
       bundler (~> 1.0)
@@ -74,6 +74,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.9.2)
   codeclimate-test-reporter
+  highline (~> 1.6.21)
   jeweler (~> 1.8.8)
   ref
   rspec (~> 3.2.0)
