@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "rspec"
 require "wref"
-
-require "garbage_collector_helper"
+require "weakling" if RUBY_ENGINE == "jruby"
+require "ref"
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

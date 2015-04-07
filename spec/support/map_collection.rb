@@ -1,7 +1,7 @@
 shared_examples_for "map" do
   include GarbageCollectorHelper
 
-  let(:str) { "Test 5" }
+  let(:user) { User.new("Kasper") }
 
   let(:map) do
     class_name = described_class.name
@@ -11,8 +11,8 @@ shared_examples_for "map" do
     end
 
     map = Wref::Map.new(impl: impl)
-    map[5] = str
-    map[6] = "Test 6"
+    map[5] = user
+    map[6] = User.new("Morten")
     map
   end
 
@@ -25,14 +25,14 @@ shared_examples_for "map" do
     str_col = ""
     key_col = ""
 
-    map.each do |key, a_str|
+    map.each do |key, user|
       count += 1
-      str_col << a_str
+      str_col << user.name
       key_col << key.to_s
     end
 
     key_col.should eq "56"
-    str_col.should eq "Test 5Test 6"
+    str_col.should eq "KasperMorten"
     count.should eq 2
   end
 
@@ -49,7 +49,7 @@ shared_examples_for "map" do
   end
 
   it "#delete" do
-    map.delete(5).should eq "Test 5"
+    map.delete(5).should === user
     map.length.should eq 1
     map.length_valid.should eq 1
   end
@@ -65,7 +65,6 @@ shared_examples_for "map" do
   end
 
   it "works with gc" do
-    string = str
     map
     force_garbage_collection
 
@@ -79,10 +78,10 @@ shared_examples_for "map" do
     map.valid?(5).should eq true
     map.valid?(6).should eq false
 
-    map.get(5).should eq "Test 5"
+    map.get(5).should === user
     map.get(6).should eq nil
 
-    map.get!(5).should eq "Test 5"
+    map.get!(5).should === user
     expect { map.get!(6) }.to raise_error(Wref::Recycled)
   end
 end

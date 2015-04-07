@@ -30,14 +30,16 @@ class Wref
     autoload :WeakRef, "#{dir}/weak_ref"
   end
 
+  attr_reader :implementation, :weak_ref
+
   #Initializes various variables.
   def initialize(object, args = {})
     if args[:impl]
-      implementation = args[:impl]
+      @implementation = args[:impl]
     elsif RUBY_ENGINE == "jruby"
-      implementation = :Weakling
+      @implementation = :Weakling
     else
-      implementation = :IdClassUnique
+      @implementation = :IdClassUnique
     end
 
     @weak_ref = Wref::Implementations.const_get(implementation).new(object)
