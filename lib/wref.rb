@@ -1,3 +1,5 @@
+require "weakref"
+
 #A simple weak-reference framework with mapping. Only handles the referencing of objects.
 #===Examples
 # user_obj = ob.get(:User, 1)
@@ -18,107 +20,49 @@ class Wref
 
   autoload :Map, "#{File.dirname(__FILE__)}/wref/map"
 
-  #Returns the classname of the object.
-  attr_reader :class_name
+  class Implementations
+    dir = "#{File.dirname(__FILE__)}/wref/implementations"
 
-  #Returns the object-ID which is used to look up the ObjectSpace (if not running JRuby).
-  attr_reader :id
-
-  #This can be used to debug the behavior of the library.
-  USE_NATIVE_RUBY_IMPLEMENTATION = false
-
-  #Initializes various variables.
-  def initialize(obj)
-    if USE_NATIVE_RUBY_IMPLEMENTATION
-      require "weakref"
-      @weakref = WeakRef.new(obj)
-    elsif RUBY_ENGINE == "jruby"
-      require "java"
-      @weakref = java.lang.ref.WeakReference.new(obj)
-    else
-      @id = obj.__id__
-      @class_name = obj.class.name.to_sym
-      ObjectSpace.define_finalizer(obj, method(:destroy))
-
-      if obj.respond_to?(:__wref_unique_id__)
-        @unique_id = obj.__wref_unique_id__
-      end
-    end
+    autoload :IdClassUnique, "#{dir}/id_class_unique"
+    autoload :JavaWeakReference, "#{dir}/java_weak_reference"
+    autoload :Ref, "#{dir}/ref"
+    autoload :Weakling, "#{dir}/weakling"
+    autoload :WeakRef, "#{dir}/weak_ref"
   end
 
-  #Destroyes most variables on the object, releasing memory and returning 'Wref::Recycled' all the time. It takes arguments because it can be called from destructor of the original object. It doesnt use the arguments for anything.
-  def destroy(*args)
-    @id = nil
-    @class_name = nil
-    @unique_id = nil
-    @weakref = nil
+  #Initializes various variables.
+  def initialize(object, args = {})
+    if args[:impl]
+      implementation = args[:impl]
+    elsif RUBY_ENGINE == "jruby"
+      implementation = :Weakling
+    else
+      implementation = :IdClassUnique
+    end
+
+    @weak_ref = Wref::Implementations.const_get(implementation).new(object)
   end
 
   #Returns the object that this weak reference holds or raises Wref::Recycled.
   # begin
-  #   obj = wref.get
-  #   print "Object still exists in memory."
+  #   object = wref.get!
+  #   puts "Object still exists in memory."
   # rescue Wref::Recycled
-  #   print "Object has been garbage-collected."
+  #   puts "Object has been garbage-collected."
   # end
-  def get
-    begin
-      if USE_NATIVE_RUBY_IMPLEMENTATION
-        begin
-          return @weakref.__getobj__
-        rescue => e
-          raise Wref::Recycled if e.class.name == "RefError"
-          raise e
-        end
-      elsif RUBY_ENGINE == "jruby"
-        raise Wref::Recycled unless @weakref
-        obj = @weakref.get
-
-        if obj == nil
-          raise Wref::Recycled
-        else
-          return obj
-        end
-      else
-        raise Wref::Recycled if !@class_name || !@id
-        obj = ObjectSpace._id2ref(@id)
-
-        #Some times this class-name will be nil for some reason - knj
-        obj_class_name = obj.class.name
-
-        if !obj_class_name || @class_name != obj_class_name.to_sym || @id != obj.__id__
-          raise Wref::Recycled
-        end
-
-        if @unique_id
-          raise Wref::Recycled if !obj.respond_to?(:__wref_unique_id__) || obj.__wref_unique_id__ != @unique_id
-        end
-
-        return obj
-      end
-    rescue RangeError, TypeError
-      raise Wref::Recycled
-    end
+  def get!
+    @weak_ref.get!
   end
 
-  #The same as the normal 'get' but returns nil instead of raising Wref::Cycled-error.
-  def get!
-    begin
-      return get
-    rescue Wref::Recycled
-      return nil
-    end
+  #The same as the normal 'get!' but returns nil instead of raising Wref::Cycled-error.
+  def get
+    @weak_ref.get
   end
 
   #Returns true if the reference is still alive.
   # print "The object still exists in memory." if wref.alive?
   def alive?
-    begin
-      get
-      return true
-    rescue Wref::Recycled
-      return false
-    end
+    @weak_ref.alive?
   end
 
   #Makes Wref compatible with the normal WeakRef.

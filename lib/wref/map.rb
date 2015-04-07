@@ -16,24 +16,20 @@
 # obj = map.get(1)
 # print "Object still exists in memory." if obj
 class Wref::Map
-  def initialize(args = nil)
+  def initialize(args = {})
+    require "monitor"
+
     @map = {}
-    @ids = {}
-    @mutex = Mutex.new
+    @mutex = Monitor.new
+    @impl = args[:impl]
   end
 
   #Sets a new object in the map with a given ID.
   def set(id, obj)
-    wref = Wref.new(obj)
+    wref = Wref.new(obj, impl: @impl)
 
     @mutex.synchronize do
       @map[id] = wref
-      @ids[obj.__id__] = id
-    end
-
-    #JRuby cant handle this atm... Dunno why...
-    if RUBY_ENGINE != "jruby"
-      ObjectSpace.define_finalizer(obj, method(:delete_by_id))
     end
 
     return nil
@@ -48,17 +44,17 @@ class Wref::Map
   #   print "Object has been garbage-collected."
   # end
   def get!(id)
-    begin
-      wref = nil
-      @mutex.synchronize do
-        raise Wref::Recycled unless @map.key?(id)
-        wref = @map[id]
-      end
+    wref = nil
+    @mutex.synchronize do
+      raise Wref::Recycled unless @map.key?(id)
+      wref = @map[id]
+    end
 
-      return wref.get
-    rescue Wref::Recycled => e
+    if object = wref.get
+      return object
+    else
       delete(id)
-      raise e
+      raise Wref::Recycled
     end
   end
 
@@ -111,7 +107,11 @@ class Wref::Map
   # print "Key exists but we dont know if the value has been garbage-collected." if map.key?(1)
   def key?(key)
     @mutex.synchronize do
-      return @map.key?(key)
+      if @map.key?(key) && get(key)
+        return true
+      else
+        return false
+      end
     end
   end
 
@@ -132,24 +132,7 @@ class Wref::Map
   def delete(key)
     @mutex.synchronize do
       wref = @map[key]
-      @ids.delete(wref.id) if wref
       object = @map.delete(key)
-
-      if object
-        return object.get
-      else
-        return nil
-      end
-    end
-  end
-
-  #This method is supposed to remove objects when finalizer is called by ObjectSpace.
-  def delete_by_id(object_id)
-    @mutex.synchronize do
-      id = @ids[object_id]
-      @ids.delete(object_id)
-
-      object = @map.delete(id)
 
       if object
         return object.get

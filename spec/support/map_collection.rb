@@ -1,33 +1,23 @@
-require "spec_helper"
+shared_examples_for "map" do
+  include GarbageCollectorHelper
 
-describe Wref::Map do
-  let(:str) { "Test" }
-  let(:gc) do
-    GC.enable
-    GC.start
-
-    10000.times do
-      some_str = "#{Digest::MD5.hexdigest(Time.now.to_f.to_s)}".clone
-      some_str = nil
-    end
-
-    GC.enable
-    GC.start
-  end
+  let(:str) { "Test 5" }
 
   let(:map) do
-    map = Wref::Map.new
+    class_name = described_class.name
+
+    if match = class_name.match(/::([A-z]+)$/)
+      impl = match[1].to_sym if match[1] != "Map"
+    end
+
+    map = Wref::Map.new(impl: impl)
     map[5] = str
-    map[6] = "trala"
+    map[6] = "Test 6"
     map
   end
 
   it "#valid?" do
-    map = Wref::Map.new
-    map[5] = str
-    map[6] = "trala"
-
-    raise "Should have been valid but wasnt." if !map.valid?(5)
+    map.valid?(5).should eq true
   end
 
   it "#each" do
@@ -42,7 +32,7 @@ describe Wref::Map do
     end
 
     key_col.should eq "56"
-    str_col.should eq "Testtrala"
+    str_col.should eq "Test 5Test 6"
     count.should eq 2
   end
 
@@ -51,19 +41,15 @@ describe Wref::Map do
   end
 
   it "#length_valid" do
-    map
-    gc
+    map.length_valid.should eq 2
+
+    force_garbage_collection
+
     map.length_valid.should eq 1
   end
 
   it "#delete" do
-    map.delete(5).should eq "Test"
-    map.length.should eq 1
-    map.length_valid.should eq 1
-  end
-
-  it "#delete_by_id" do
-    map.delete_by_id(str.__id__).should eq "Test"
+    map.delete(5).should eq "Test 5"
     map.length.should eq 1
     map.length_valid.should eq 1
   end
@@ -73,14 +59,15 @@ describe Wref::Map do
     map.key?(6).should eq true
     map.key?(7).should eq false
 
-    gc
+    force_garbage_collection
 
     map.key?(6).should eq false
   end
 
   it "works with gc" do
+    string = str
     map
-    gc
+    force_garbage_collection
 
     #Test each-method.
     count = 0
@@ -92,10 +79,10 @@ describe Wref::Map do
     map.valid?(5).should eq true
     map.valid?(6).should eq false
 
-    map.get(5).should eq "Test"
+    map.get(5).should eq "Test 5"
     map.get(6).should eq nil
 
-    map.get!(5).should eq "Test"
+    map.get!(5).should eq "Test 5"
     expect { map.get!(6) }.to raise_error(Wref::Recycled)
   end
 end
