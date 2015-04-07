@@ -42,7 +42,7 @@ class Wref::Implementations::IdClassUnique
 
 private
 
-  def destroy(object_id)
+  def destroy(*args)
     @id = nil
     @class_name = nil
     @unique_id = nil

@@ -4,6 +4,7 @@ class Wref::Implementations::WeakRef
     @id = object.__id__
     @class_name = object.class.name.to_sym
     @weak_ref = ::WeakRef.new(object)
+    ObjectSpace.define_finalizer(object, method(:destroy))
   end
 
   def get
@@ -44,9 +45,9 @@ class Wref::Implementations::WeakRef
 
 private
 
-  def destroy
+  def destroy(*args)
     @id = nil
     @class_name = nil
-    @weak_ref = nil
+    @unique_id = nil
   end
 end
