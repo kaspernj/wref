@@ -45,7 +45,8 @@ weak_map.valid?(1) #=> true | false
 ### Get from a key
 
 ```ruby
-weak_map.get(1) #=> "Test" | Error - Wref::Recycled
+weak_map.get(1) #=> "Test" | nil
+weak_map.get!(1) #=> "Test" | Error - Wref::Recycled
 ```
 
 ## Contributing to wref
