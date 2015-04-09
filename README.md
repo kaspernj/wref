@@ -29,24 +29,70 @@ weak_ref = Wref.new(str)
 weak_ref.alive? #=> true | false
 ```
 
-### Weak map
+### Spawn a weak map
 
 ```ruby
 weak_map = Wref::Map.new
+```
+
+### Set a key and value in a weak map
+
+```ruby
+str = "Test"
 map[1] = str
+map.set(1, str)
+```
+
+### Get values from a weak map
+
+```ruby
+map.get(1) #=> "Test" | nil
+map.get!(1) #=> "Test" | Wref::Recycled error
+```
+
+### Loop over all valid pairs in a weak map
+
+```ruby
+map.each do |key, value|
+  puts "Valid pair: #{key}: #{value}"
+end
 ```
 
 ### Check if key is valid in a weak map.
 
 ```ruby
-weak_map.valid?(1) #=> true | false
+map.valid?(1) #=> true | false
+```
+
+### Getting length of both valid and invalid and the current time in a weak map (fastest)
+
+```ruby
+map.length #=> 1
+```
+
+### Getting length of valid options in a weak map
+
+```ruby
+map.length_valid #=> 0
 ```
 
 ### Get from a key
 
 ```ruby
-weak_map.get(1) #=> "Test" | nil
-weak_map.get!(1) #=> "Test" | Error - Wref::Recycled
+map.get(1) #=> "Test" | nil
+map.get!(1) #=> "Test" | Error - Wref::Recycled
+```
+
+### Delete a key from a weak map
+
+```ruby
+map.delete(1) #=> "Test" | nil if recycled
+```
+
+### Delete all recycled options
+
+```ruby
+map.clean
 ```
 
 ## Contributing to wref
