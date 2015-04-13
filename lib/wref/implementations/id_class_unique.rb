@@ -14,7 +14,13 @@ class Wref::Implementations::IdClassUnique
 
   def get
     return nil if !@class_name || !@id
-    object = ObjectSpace._id2ref(@id)
+
+    begin
+      object = ObjectSpace._id2ref(@id)
+    rescue RangeError
+      destroy
+      return nil
+    end
 
     #Some times this class-name will be nil for some reason - knj
     object_class_name = object.class.name
