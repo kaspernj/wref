@@ -60,14 +60,14 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, ["~> 3.2.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.9.2"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.8"])
-      s.add_development_dependency(%q<highline>, ["~> 1.6.21"])
+      s.add_development_dependency(%q<highline>, "~> 2.0.3")
       s.add_development_dependency(%q<weakling>, [">= 0"])
       s.add_development_dependency(%q<ref>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, ["~> 3.2.0"])
       s.add_dependency(%q<bundler>, ["~> 1.9.2"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.8"])
-      s.add_dependency(%q<highline>, ["~> 1.6.21"])
+      s.add_dependency(%q<highline>, "~> 2.0.3")
       s.add_dependency(%q<weakling>, [">= 0"])
       s.add_dependency(%q<ref>, [">= 0"])
     end
@@ -75,7 +75,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec>, ["~> 3.2.0"])
     s.add_dependency(%q<bundler>, ["~> 1.9.2"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.8"])
-    s.add_dependency(%q<highline>, ["~> 1.6.21"])
+    s.add_dependency(%q<highline>, "~> 2.0.3")
     s.add_dependency(%q<weakling>, [">= 0"])
     s.add_dependency(%q<ref>, [">= 0"])
   end

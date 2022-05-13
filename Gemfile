@@ -9,7 +9,7 @@ group :development do
   gem "rspec", "~> 3.2.0"
   gem "bundler", "~> 1.9.2"
   gem "jeweler", "~> 1.8.8"
-  gem "highline", "~> 1.6.21"
+  gem "highline", "~> 2.0.3"
   gem "weakling"
   gem "ref"
 end
