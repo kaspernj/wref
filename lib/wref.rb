@@ -33,9 +33,9 @@ class Wref
   attr_reader :implementation, :weak_ref
 
   #Initializes various variables.
-  def initialize(object, args = {})
-    if args[:impl]
-      @implementation = args[:impl]
+  def initialize(object, impl: nil)
+    if impl
+      @implementation = impl
     elsif RUBY_ENGINE == "jruby"
       @implementation = :JavaWeakReference
     else
