@@ -70,7 +70,8 @@ class Wref::Map
     end
   end
 
-  #Scans the whole map and removes dead references. After the implementation of automatic clean-up by using ObjectSpace.define_finalizer, there should be no reason to call this method.
+  # Scans the whole map and removes dead references. After the implementation of automatic clean-up by using ObjectSpace.define_finalizer,
+  # there should be no reason to call this method.
   def clean
     keys = nil
     @mutex.synchronize do
