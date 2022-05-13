@@ -59,14 +59,14 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, ["~> 3.2.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.9.2"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.8.8"])
+      s.add_development_dependency(%q<jeweler>, "~> 2.3.9")
       s.add_development_dependency(%q<highline>, ["~> 1.6.21"])
       s.add_development_dependency(%q<weakling>, [">= 0"])
       s.add_development_dependency(%q<ref>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, ["~> 3.2.0"])
       s.add_dependency(%q<bundler>, ["~> 1.9.2"])
-      s.add_dependency(%q<jeweler>, ["~> 1.8.8"])
+      s.add_dependency(%q<jeweler>, "~> 2.3.9")
       s.add_dependency(%q<highline>, ["~> 1.6.21"])
       s.add_dependency(%q<weakling>, [">= 0"])
       s.add_dependency(%q<ref>, [">= 0"])
@@ -74,7 +74,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<rspec>, ["~> 3.2.0"])
     s.add_dependency(%q<bundler>, ["~> 1.9.2"])
-    s.add_dependency(%q<jeweler>, ["~> 1.8.8"])
+    s.add_dependency(%q<jeweler>, "~> 2.3.9")
     s.add_dependency(%q<highline>, ["~> 1.6.21"])
     s.add_dependency(%q<weakling>, [">= 0"])
     s.add_dependency(%q<ref>, [">= 0"])
