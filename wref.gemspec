@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.files = Dir["{include,lib}/**/*"] + ["Rakefile"]
   s.homepage = "http://github.com/kaspernj/wref"
   s.licenses = ["MIT"]
-  s.rubygems_version = "2.4.0"
   s.summary = "Weak references and weak hash for Ruby"
 
   s.add_dependency "ref"
