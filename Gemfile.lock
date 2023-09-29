@@ -66,7 +66,7 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.4.2)
-    weakling (0.0.3)
+    weakling (0.0.4-java)
 
 PLATFORMS
   java
