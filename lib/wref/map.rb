@@ -169,6 +169,27 @@ class Wref::Map
     end
   end
 
+  def each_key(&block)
+    enum = Enumerator.new do |yielder|
+      ids = nil
+      @mutex.synchronize do
+        ids = @map.keys
+      end
+
+      ids.each do |id|
+        if obj = get(id)
+          yielder << id
+        end
+      end
+    end
+
+    if block
+      enum.each(&block)
+    else
+      return enum
+    end
+  end
+
   #Make it hash-compatible.
   alias has_key? key?
   alias [] get
