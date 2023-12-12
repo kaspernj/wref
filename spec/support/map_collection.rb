@@ -70,7 +70,7 @@ shared_examples_for "map" do
 
     #Test each-method.
     count = 0
-    map.each do |key, a_str|
+    map.each_key do |key|
       count += 1
     end
 
