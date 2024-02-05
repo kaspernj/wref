@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wref (0.0.8)
+    wref (0.0.9)
       ref
       weakling
 
