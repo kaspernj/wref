@@ -108,17 +108,6 @@ RSpec/BeEq:
     - 'spec/support/map_collection.rb'
     - 'spec/support/wref_collection.rb'
 
-# Offense count: 5
-# Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
-# Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
-  Exclude:
-    - 'spec/implementations/id_class_unique_spec.rb'
-    - 'spec/implementations/java_weak_reference_spec.rb'
-    - 'spec/implementations/ref_spec.rb'
-    - 'spec/implementations/weak_ref_spec.rb'
-    - 'spec/implementations/weakling_spec.rb'
-
 # Offense count: 12
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
