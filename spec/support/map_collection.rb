@@ -36,6 +36,32 @@ shared_examples_for "map" do
     count.should eq 2
   end
 
+  it "#each_key" do
+    count = 0
+    key_col = ""
+
+    map.each_key do |key|
+      count += 1
+      key_col << key.to_s
+    end
+
+    key_col.should eq "56"
+    count.should eq 2
+  end
+
+  it "#each_value" do
+    count = 0
+    str_col = ""
+
+    map.each_value do |user|
+      count += 1
+      str_col << user.name
+    end
+
+    str_col.should eq "KasperMorten"
+    count.should eq 2
+  end
+
   it "#length" do
     map.length.should eq 2
   end
@@ -70,7 +96,7 @@ shared_examples_for "map" do
 
     #Test each-method.
     count = 0
-    map.each do |key, a_str|
+    map.each_key do |key|
       count += 1
     end
 

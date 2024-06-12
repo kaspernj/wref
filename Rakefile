@@ -11,20 +11,6 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "wref"
-  gem.homepage = "http://github.com/kaspernj/wref"
-  gem.license = "MIT"
-  gem.summary = %Q{Weak references and weak hash for Ruby}
-  gem.description = %Q{Lightweight weak reference and weak hash that works in 1.9 and JRuby.}
-  gem.email = "k@spernj.org"
-  gem.authors = ["Kasper Johansen"]
-  # dependencies defined in Gemfile
-end
-Jeweler::RubygemsDotOrgTasks.new
-
 require 'rspec/core'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |spec|
@@ -40,7 +26,7 @@ task :default => :spec
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  version = File.read('VERSION')
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "wref #{version}"
