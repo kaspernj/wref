@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.summary = "Weak references and weak hash for Ruby"
 
   s.add_dependency "ref"
-  s.add_dependency "weakling"
+  s.add_dependency "weakling" if RUBY_PLATFORM == "java"
 end
