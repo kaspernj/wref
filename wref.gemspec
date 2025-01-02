@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.authors = ["Kasper Stöckel"]
   s.description = "Lightweight weak reference and weak hash that works in 1.9 and JRuby."
-  s.email = "k@spernj.org"
+  s.email = "kasper@diestoeckels.de"
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md"
