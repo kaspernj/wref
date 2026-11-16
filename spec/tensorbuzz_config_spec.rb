@@ -57,5 +57,22 @@ describe "tensorbuzz config" do
       expect(paths_for(build)).to include("!.rubocop.yml", "!.rubocop_todo.yml")
     end
   end
+
+  it "keeps every file bundler reads inside the paths of the build that runs it" do
+    # Negating one of these would let a bump of it skip the only build that installs and checks it.
+    always_required = ["!Gemfile", "!Gemfile.lock", "!VERSION", "!wref.gemspec", "!lib/**", "!spec/**"]
+
+    builds.each_value do |build|
+      expect(paths_for(build)).not_to include(*always_required)
+    end
+  end
+
+  it "keeps tensorbuzz.yml as the only build config at the repository root" do
+    # A legacy peak_flow.yml at the root is read ahead of this file and would replace every paths block.
+    root = File.expand_path("..", __dir__)
+    configs = Dir.glob("*.yml", base: root).select { |name| File.read(File.join(root, name)).include?("builds:") }
+
+    expect(configs).to eq(["tensorbuzz.yml"])
+  end
 end
 # rubocop:enable RSpec/DescribeClass
