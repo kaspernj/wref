@@ -1,0 +1,73 @@
+rvm: true
+builds:
+  build_1:
+    environment:
+      RUBY_VERSION: 2.7.7
+    name: Ruby 2.7.7
+    paths:
+      - "**/*"
+      - "!*.md"
+      - "!LICENSE.txt"
+      - "!.document"
+      - "!.gitignore"
+      - "!.github/**"
+      - "!.rubocop.yml"
+      - "!.rubocop_todo.yml"
+    script:
+      - bundle exec rspec
+  build_2:
+    environment:
+      RUBY_VERSION: 3.0.6
+    name: Ruby 3.0.6
+    paths:
+      - "**/*"
+      - "!*.md"
+      - "!LICENSE.txt"
+      - "!.document"
+      - "!.gitignore"
+      - "!.github/**"
+      - "!.rubocop.yml"
+      - "!.rubocop_todo.yml"
+    script:
+      - bundle exec rspec
+  build_3:
+    environment:
+      RUBY_VERSION: 3.1.4
+    name: Ruby 3.1.4
+    paths:
+      - "**/*"
+      - "!*.md"
+      - "!LICENSE.txt"
+      - "!.document"
+      - "!.gitignore"
+      - "!.github/**"
+      - "!.rubocop.yml"
+      - "!.rubocop_todo.yml"
+    script:
+      - bundle exec rspec
+  build_4:
+    environment:
+      RUBY_VERSION: 3.2.2
+    name: Ruby 3.2.2
+    paths:
+      - "**/*"
+      - "!*.md"
+      - "!LICENSE.txt"
+      - "!.document"
+      - "!.gitignore"
+      - "!.github/**"
+      - "!.rubocop.yml"
+      - "!.rubocop_todo.yml"
+    script:
+      - bundle exec rspec
+  build_5:
+    name: Linters
+    paths:
+      - "**/*"
+      - "!*.md"
+      - "!LICENSE.txt"
+      - "!.document"
+      - "!.gitignore"
+      - "!.github/**"
+    script:
+      - bundle exec rubocop
